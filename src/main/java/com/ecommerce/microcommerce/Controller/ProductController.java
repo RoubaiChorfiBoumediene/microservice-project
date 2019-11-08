@@ -20,21 +20,15 @@ public class ProductController {
     private ProductDao productDao;
 
     //Récupérer la liste des produits
-    @RequestMapping(value = "/Produits", method = RequestMethod.GET)
-
-    public MappingJacksonValue listeProduits() {
-
-        List<Product> produits = productDao.fintAll();
-
+    @RequestMapping(value = "/Products", method = RequestMethod.GET)
+    public MappingJacksonValue liseProducts() {
+        List<Product> product = productDao.fintAll();
         SimpleBeanPropertyFilter monFiltre = SimpleBeanPropertyFilter.serializeAllExcept("prixAchat");
-
         FilterProvider listDeNosFiltres = new SimpleFilterProvider().addFilter("monFiltreDynamique", monFiltre);
+        MappingJacksonValue productsFilters = new MappingJacksonValue(product);
+        productsFilters.setFilters(listDeNosFiltres);
 
-        MappingJacksonValue produitsFiltres = new MappingJacksonValue(produits);
-
-        produitsFiltres.setFilters(listDeNosFiltres);
-
-        return produitsFiltres;
+        return productsFilters;
     }
     //produit /{id}
     @GetMapping(value= "Products/{id}")
