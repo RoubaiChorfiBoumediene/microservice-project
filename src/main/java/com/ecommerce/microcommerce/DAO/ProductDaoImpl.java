@@ -11,10 +11,10 @@ public class ProductDaoImpl implements ProductDao {
     public static List<Product> products =new ArrayList<>();
 
     static {
-        products.add(new Product(1,new String("Ordinateur portable "),350));
-        products.add(new Product(2,new String("portable "),450));
-        products.add(new Product(3,new String("télévision "),550));
-        products.add(new Product(4,new String("machine a lavez "),650));
+        products.add(new Product(1,new String("Ordinateur portable "),350,200));
+        products.add(new Product(2,new String("portable "),450,200));
+        products.add(new Product(3,new String("télévision "),550,250));
+        products.add(new Product(4,new String("machine a lavez "),650,250));
 
     }
     @Override
