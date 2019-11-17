@@ -1,6 +1,7 @@
 package com.ecommerce.microcommerce.Controller;
 
 import com.ecommerce.microcommerce.DAO.ProductDao;
+import com.ecommerce.microcommerce.Exceptions.ProduitIntrouvableException;
 import com.ecommerce.microcommerce.Model.Product;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
@@ -11,6 +12,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -33,9 +35,12 @@ public class ProductController {
 
 
     //produit /{id}
-    @GetMapping(value = "Products/{id}")
+    @GetMapping(value = "Product/{id}")
     public Product afficherUnProduit(@PathVariable int id) {
-        return productDao.findById(id);
+        Product product=  productDao.findById(id);
+        if(product==null) throw new ProduitIntrouvableException("Le produit avec l'id " + id + " est INTROUVABLE. Écran Bleu si je pouvais.");
+        return product;
+
     }
     @GetMapping(value = "Products/{prix}")
     public List<Product> afficherProduitSupp(@PathVariable int prix ){
@@ -48,7 +53,7 @@ public class ProductController {
 
     //CRUD METHODES
     @PostMapping(value = "Products")
-    public ResponseEntity<Void> ajouterProduit(@RequestBody Product product) {
+    public ResponseEntity<Void> ajouterProduit(@Valid @RequestBody Product product) {
         Product productAdded = productDao.save(product);
 
         if (productAdded == null)
