@@ -16,13 +16,13 @@ import java.util.List;
 
 @RestController
 public class ProductController {
-@Autowired
+    @Autowired
     private ProductDao productDao;
 
     //Récupérer la liste des produits
     @RequestMapping(value = "/Products", method = RequestMethod.GET)
     public MappingJacksonValue liseProducts() {
-        List<Product> product = productDao.fintAll();
+        List<Product> product = productDao.findAll();
         SimpleBeanPropertyFilter monFiltre = SimpleBeanPropertyFilter.serializeAllExcept("prixAchat");
         FilterProvider listDeNosFiltres = new SimpleFilterProvider().addFilter("monFiltreDynamique", monFiltre);
         MappingJacksonValue productsFilters = new MappingJacksonValue(product);
@@ -30,15 +30,26 @@ public class ProductController {
 
         return productsFilters;
     }
-    //produit /{id}
-    @GetMapping(value= "Products/{id}")
-    public Product afficherUnProduit (@PathVariable int id ){
 
+
+    //produit /{id}
+    @GetMapping(value = "Products/{id}")
+    public Product afficherUnProduit(@PathVariable int id) {
         return productDao.findById(id);
     }
+    @GetMapping(value = "Products/{prix}")
+    public List<Product> afficherProduitSupp(@PathVariable int prix ){
+        return productDao.findByPrixGreaterThan(prix);
+    }
+    @GetMapping(value = "test/produits/{recherche}")
+    public List<Product> testeDeRequetes(@PathVariable String recherche) {
+        return productDao.findByproduitLike("%"+recherche+"%");
+    }
+
+    //CRUD METHODES
     @PostMapping(value = "Products")
-    public ResponseEntity<Void> ajouterProduit(@RequestBody Product product){
-        Product productAdded =  productDao.save(product);
+    public ResponseEntity<Void> ajouterProduit(@RequestBody Product product) {
+        Product productAdded = productDao.save(product);
 
         if (productAdded == null)
             return ResponseEntity.noContent().build();
@@ -51,5 +62,10 @@ public class ProductController {
 
         return ResponseEntity.created(location).build();
     }
+
+    @DeleteMapping (value = "/ProduitDel/{id}")
+    public void supprimerProduit(@PathVariable int id) {
+        productDao.deleteById(id);
     }
+}
 

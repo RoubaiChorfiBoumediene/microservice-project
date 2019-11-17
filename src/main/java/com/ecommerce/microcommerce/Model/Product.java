@@ -1,20 +1,28 @@
 package com.ecommerce.microcommerce.Model;
+
 import com.fasterxml.jackson.annotation.JsonFilter;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 
-@JsonFilter("monFiltreDynamique")
+@Entity
+//@JsonFilter("monFiltreDynamique")
 public class Product {
-    private int id ;
-    private String produit ;
-    private int prix ;
+    @Id
+    @GeneratedValue
+    private int id;
+
+    private String produit;
+    private int prix;
     private int prixAchat;
 
 
     public Product() {
     }
 
-    public Product(int id, String produit, int prix,int prixAchat) {
+    public Product(int id, String produit, int prix, int prixAchat) {
         this.setId(id);
         this.setProduit(produit);
         this.setPrix(prix);
@@ -44,6 +52,7 @@ public class Product {
     public void setPrix(int prix) {
         this.prix = prix;
     }
+
     public int getPrixAchat() {
         return prixAchat;
     }
@@ -51,6 +60,7 @@ public class Product {
     public void setPrixAchat(int prixAchat) {
         this.prixAchat = prixAchat;
     }
+
     @Override
     public String toString() {
         return "Product{" +
